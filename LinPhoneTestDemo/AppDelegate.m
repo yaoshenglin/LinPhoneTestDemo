@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import <UserNotifications/UserNotifications.h>
 #import "UCSIPCCManager.h"
 #import "CallIncomingView.h"
 #import "CallOutgoingView.h"
@@ -28,17 +29,29 @@
     // Override point for customization after application launch.
     
     [UCSUserDefaultManager SetLocalDataString:@"UDP" key:@"login_transport"];   // 默认UDP接入,TLS
-    //[self setNotification];
+    [self setNotification:application];
     [self setUCSSDK];
     
     return YES;
 }
 
-- (void)setNotification
+- (void)setNotification:(UIApplication *)application
 {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(callStateUpdateEvent:) name:kUCSCallUpdate object:nil];
+    //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(callStateUpdateEvent:) name:kUCSCallUpdate object:nil];
     
     //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(registrationUpdateEvent:) name:kUCSRegistrationUpdate object:nil];
+    
+    //iOS8 - iOS10
+    [application registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert | UIUserNotificationTypeSound | UIUserNotificationTypeBadge categories:nil]];
+    
+    //iOS10
+    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+    UNAuthorizationOptions options = UNAuthorizationOptionBadge | UNAuthorizationOptionSound | UNAuthorizationOptionAlert;
+    [center requestAuthorizationWithOptions:options completionHandler:^(BOOL granted, NSError * _Nullable error) {
+        
+    }];
+    
+    [[UIApplication sharedApplication] registerForRemoteNotifications];
 }
 
 - (void)setUCSSDK

@@ -1330,15 +1330,15 @@ void networkReachabilityCallBack(SCNetworkReachabilityRef target, SCNetworkReach
 #pragma mark -
 
 static LinphoneCoreVTable linphonec_vtable = {
-	.show = NULL,
+	//.show = NULL,
 	.call_state_changed = (LinphoneCoreCallStateChangedCb)linphone_iphone_call_state,
 	.registration_state_changed = linphone_iphone_registration_state,
 	.notify_presence_received = NULL,
 	.new_subscription_requested = NULL,
 	.authentication_requested = NULL,
-	.display_status = linphone_iphone_display_status,
-	.display_message = linphone_iphone_log,
-	.display_warning = linphone_iphone_log,
+	//.display_status = linphone_iphone_display_status,
+	//.display_message = linphone_iphone_log,
+	//.display_warning = linphone_iphone_log,
 	//.display_url = NULL,
 	//.text_received = NULL,
 	.message_received = linphone_iphone_message_received,
