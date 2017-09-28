@@ -1,0 +1,11 @@
+/* 
+  InfoPlist.strings
+  LinPhoneTestDemo
+
+  Created by xy on 2017/9/21.
+  Copyright © 2017年 xy. All rights reserved.
+*/
+
+
+CFBundleDisplayName = "网络电话";
+CFBundleDevelopmentRegion = "zh_CN";

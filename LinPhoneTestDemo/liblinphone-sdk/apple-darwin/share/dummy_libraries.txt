@@ -1,0 +1,9 @@
+libcunit
+libavcodec
+libtunnel
+libmsbcg729
+libswscale
+libswresample
+libx264
+libavutil
+libmsx264
