@@ -227,6 +227,48 @@
     [alert show];
 }
 
+- (void)onkLinphoneTextReceived:(NSNotification *)notice
+{
+    NSDictionary *dict = notice.userInfo;
+    LinphoneChatMessage *message = (__bridge LinphoneChatMessage *)([dict objectForKey:@"message"]);
+    int state = linphone_chat_message_get_state(message);
+    NSLog(@"msg state = %d",state);
+    
+    NSString *textMsg = [UCSIPCCManager TextMessageForChat:message];
+    NSLog(@"textMsg = %@",textMsg);
+    
+//    NSString* log = [NSString stringWithCString:linphone_chat_message_get_text(message) encoding:[NSString defaultCStringEncoding]];
+//    NSLog(@"log = %@",log);
+//    
+//    if (state > 7 || [textMsg isEqualToString:@"🗻"]) {
+//        if (state < 8) {
+//            const char *text = linphone_chat_message_get_text(message) ?: "";
+//            NSString *content = [NSString stringWithUTF8String:text] ?: [NSString stringWithCString:text encoding:NSASCIIStringEncoding]
+//            ?: NSLocalizedString(@"(invalid string)", nil);
+//            NSLog(@"content = %@",content);
+//        }else{
+//            const char *url = linphone_chat_message_get_external_body_url(message);
+//            NSString *urlStr = [NSString stringWithUTF8String:url];
+//            NSLog(@"urlStr = %@",urlStr);
+//        }
+//        return;
+//    }
+//    
+//    NSString *replyText = @"测试数据";
+//    LinphoneChatRoom *room = (__bridge LinphoneChatRoom *)([dict objectForKey:@"message"]);
+//    if (room) {
+//        LinphoneChatMessage *msg = linphone_chat_room_create_message(room, replyText.UTF8String);
+//        linphone_chat_room_send_chat_message(room, linphone_chat_message_ref(msg));
+//    }
+//    
+//    const LinphoneContent *c = linphone_chat_message_get_file_transfer_information(message);
+//    if (c) {
+//        const char *name = linphone_content_get_name(c);
+//        const char *string = linphone_content_get_string_buffer(c);
+//        NSLog(@"name = %s, string = %s",name,string);
+//    }
+}
+
 #pragma mark
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
