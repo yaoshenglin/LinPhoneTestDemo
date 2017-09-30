@@ -19,11 +19,15 @@
 
 #import <UIKit/UIKit.h>
 #import "UCSIPCCManager.h"
+#import "TPMultiLayoutViewController.h"
 
-#import "UICompositeViewController.h"
+//#import "UICompositeViewController.h"
 
-@interface CallOutgoingView : TPMultiLayoutViewController <UICompositeViewDelegate> {
+@interface CallOutgoingView : TPMultiLayoutViewController
+{
+    
 }
+
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property (weak, nonatomic) IBOutlet UILabel *detailLabel;
 

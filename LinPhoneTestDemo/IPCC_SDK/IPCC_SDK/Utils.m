@@ -72,6 +72,66 @@
 
 @implementation LinphoneUtils
 
++ (NSString *)timeToString:(time_t)time withFormat:(LinphoneDateFormat)format
+{
+    NSString *formatstr;
+    NSDate *todayDate = [[NSDate alloc] init];
+    NSDate *messageDate = (time == 0) ? todayDate : [NSDate dateWithTimeIntervalSince1970:time];
+    NSDateComponents *todayComponents =
+    [[NSCalendar currentCalendar] components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear
+                                    fromDate:todayDate];
+    NSDateComponents *dateComponents =
+    [[NSCalendar currentCalendar] components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear
+                                    fromDate:messageDate];
+    BOOL sameYear = (todayComponents.year == dateComponents.year);
+    BOOL sameMonth = (sameYear && (todayComponents.month == dateComponents.month));
+    BOOL sameDay = (sameMonth && (todayComponents.day == dateComponents.day));
+    
+    switch (format) {
+        case LinphoneDateHistoryList:
+            if (sameYear) {
+                formatstr = NSLocalizedString(@"EEE dd MMMM",
+                                              @"Date formatting in History List, for current year (also see "
+                                              @"http://cybersam.com/ios-dev/quick-guide-to-ios-dateformatting)");
+            } else {
+                formatstr = NSLocalizedString(@"EEE dd MMMM yyyy",
+                                              @"Date formatting in History List, for previous years (also see "
+                                              @"http://cybersam.com/ios-dev/quick-guide-to-ios-dateformatting)");
+            }
+            break;
+        case LinphoneDateHistoryDetails:
+            formatstr = NSLocalizedString(@"EEE dd MMM 'at' HH'h'mm", @"Date formatting in History Details (also see "
+                                          @"http://cybersam.com/ios-dev/"
+                                          @"quick-guide-to-ios-dateformatting)");
+            break;
+        case LinphoneDateChatList:
+            if (sameDay) {
+                formatstr = NSLocalizedString(
+                                              @"HH:mm", @"Date formatting in Chat List and Conversation bubbles, for current day (also see "
+                                              @"http://cybersam.com/ios-dev/quick-guide-to-ios-dateformatting)");
+            } else {
+                formatstr =
+                NSLocalizedString(@"MM/dd", @"Date formatting in Chat List, for all but current day (also see "
+                                  @"http://cybersam.com/ios-dev/quick-guide-to-ios-dateformatting)");
+            }
+            break;
+        case LinphoneDateChatBubble:
+            if (sameDay) {
+                formatstr = NSLocalizedString(
+                                              @"HH:mm", @"Date formatting in Chat List and Conversation bubbles, for current day (also see "
+                                              @"http://cybersam.com/ios-dev/quick-guide-to-ios-dateformatting)");
+            } else {
+                formatstr = NSLocalizedString(@"MM/dd - HH:mm",
+                                              @"Date formatting in Conversation bubbles, for all but current day (also "
+                                              @"see http://cybersam.com/ios-dev/quick-guide-to-ios-dateformatting)");
+            }
+            break;
+    }
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:formatstr];
+    return [dateFormatter stringFromDate:messageDate];
+}
+
 + (BOOL)findAndResignFirstResponder:(UIView*)view {
     if (view.isFirstResponder) {
         [view resignFirstResponder];

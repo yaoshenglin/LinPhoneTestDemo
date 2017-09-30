@@ -94,7 +94,6 @@
 		1455E64F1F57FF0300044DE0 /* DTAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1455E62F1F57FF0300044DE0 /* DTAlertView.m */; };
 		1455E6501F57FF0300044DE0 /* TPMultiLayoutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1455E6331F57FF0300044DE0 /* TPMultiLayoutViewController.m */; };
 		1455E6511F57FF0300044DE0 /* UIAddressTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 1455E6351F57FF0300044DE0 /* UIAddressTextField.m */; };
-		1455E6541F57FF0300044DE0 /* UICompositeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1455E63B1F57FF0300044DE0 /* UICompositeViewController.m */; };
 		1455E6551F57FF0300044DE0 /* UIConferenceHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 1455E63D1F57FF0300044DE0 /* UIConferenceHeader.m */; };
 		1455E6561F57FF0300044DE0 /* UIDigitButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 1455E63F1F57FF0300044DE0 /* UIDigitButton.m */; };
 		1455E6571F57FF0300044DE0 /* UIDigitButtonLongPlus.m in Sources */ = {isa = PBXBuildFile; fileRef = 1455E6411F57FF0300044DE0 /* UIDigitButtonLongPlus.m */; };
@@ -544,6 +543,7 @@
 		1455E9D51F58041800044DE0 /* waiting_time.png in Resources */ = {isa = PBXBuildFile; fileRef = 1455E8231F58041800044DE0 /* waiting_time.png */; };
 		1455E9D61F58041800044DE0 /* waiting_time@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1455E8241F58041800044DE0 /* waiting_time@2x.png */; };
 		145F76701F73A34700FB3D45 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 145F766F1F73A34700FB3D45 /* InfoPlist.strings */; };
+		146032E41F7CE3CC00005B73 /* AudioClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 146032E31F7CE3CC00005B73 /* AudioClass.m */; };
 		1484DA671F78AFDE00C978EF /* Toast+UIView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1484DA661F78AFDE00C978EF /* Toast+UIView.m */; };
 		148DA9101F564C140080C792 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 148DA90F1F564C140080C792 /* main.m */; };
 		148DA9131F564C140080C792 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 148DA9121F564C140080C792 /* AppDelegate.m */; };
@@ -724,8 +724,6 @@
 		1455E6331F57FF0300044DE0 /* TPMultiLayoutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TPMultiLayoutViewController.m; sourceTree = "<group>"; };
 		1455E6341F57FF0300044DE0 /* UIAddressTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIAddressTextField.h; sourceTree = "<group>"; };
 		1455E6351F57FF0300044DE0 /* UIAddressTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIAddressTextField.m; sourceTree = "<group>"; };
-		1455E63A1F57FF0300044DE0 /* UICompositeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UICompositeViewController.h; sourceTree = "<group>"; };
-		1455E63B1F57FF0300044DE0 /* UICompositeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UICompositeViewController.m; sourceTree = "<group>"; };
 		1455E63C1F57FF0300044DE0 /* UIConferenceHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIConferenceHeader.h; sourceTree = "<group>"; };
 		1455E63D1F57FF0300044DE0 /* UIConferenceHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIConferenceHeader.m; sourceTree = "<group>"; };
 		1455E63E1F57FF0300044DE0 /* UIDigitButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIDigitButton.h; sourceTree = "<group>"; };
@@ -1187,6 +1185,8 @@
 		1455E8231F58041800044DE0 /* waiting_time.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = waiting_time.png; sourceTree = "<group>"; };
 		1455E8241F58041800044DE0 /* waiting_time@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "waiting_time@2x.png"; sourceTree = "<group>"; };
 		145F766F1F73A34700FB3D45 /* InfoPlist.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = InfoPlist.strings; sourceTree = "<group>"; };
+		146032E21F7CE3CC00005B73 /* AudioClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioClass.h; sourceTree = "<group>"; };
+		146032E31F7CE3CC00005B73 /* AudioClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioClass.m; sourceTree = "<group>"; };
 		1484DA651F78AFDE00C978EF /* Toast+UIView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Toast+UIView.h"; sourceTree = "<group>"; };
 		1484DA661F78AFDE00C978EF /* Toast+UIView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Toast+UIView.m"; sourceTree = "<group>"; };
 		148DA90B1F564C140080C792 /* LinPhoneTestDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LinPhoneTestDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1873,6 +1873,8 @@
 				14C883181F7BB25500C0BACE /* MBProgressHUD.m */,
 				14C883191F7BB25500C0BACE /* UCSUserDefaultManager.h */,
 				14C8831A1F7BB25500C0BACE /* UCSUserDefaultManager.m */,
+				146032E21F7CE3CC00005B73 /* AudioClass.h */,
+				146032E31F7CE3CC00005B73 /* AudioClass.m */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -1884,8 +1886,6 @@
 				1455E6311F57FF0300044DE0 /* TPMultiLayoutViewController */,
 				1455E6341F57FF0300044DE0 /* UIAddressTextField.h */,
 				1455E6351F57FF0300044DE0 /* UIAddressTextField.m */,
-				1455E63A1F57FF0300044DE0 /* UICompositeViewController.h */,
-				1455E63B1F57FF0300044DE0 /* UICompositeViewController.m */,
 				1455E63C1F57FF0300044DE0 /* UIConferenceHeader.h */,
 				1455E63D1F57FF0300044DE0 /* UIConferenceHeader.m */,
 				1455E63E1F57FF0300044DE0 /* UIDigitButton.h */,
@@ -4104,10 +4104,10 @@
 				1455E66E1F57FF0C00044DE0 /* CallOutgoingView.m in Sources */,
 				1455E5E41F579EBB00044DE0 /* UCSIPCCClass.m in Sources */,
 				1455E5E21F579EB100044DE0 /* UCSIPCCManager.m in Sources */,
-				1455E6541F57FF0300044DE0 /* UICompositeViewController.m in Sources */,
 				14C8831B1F7BB25500C0BACE /* MBProgressHUD.m in Sources */,
 				1455E6511F57FF0300044DE0 /* UIAddressTextField.m in Sources */,
 				148DA9161F564C140080C792 /* ViewController.m in Sources */,
+				146032E41F7CE3CC00005B73 /* AudioClass.m in Sources */,
 				1455E5F31F579EED00044DE0 /* FastAddressBook.m in Sources */,
 				148DA9131F564C140080C792 /* AppDelegate.m in Sources */,
 				1455E6551F57FF0300044DE0 /* UIConferenceHeader.m in Sources */,

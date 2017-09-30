@@ -19,9 +19,9 @@
 
 #import <UIKit/UIKit.h>
 #import "UCSIPCCManager.h"
-
-#import "UICompositeViewController.h"
 #import "TPMultiLayoutViewController.h"
+
+//#import "UICompositeViewController.h"
 
 @protocol IncomingCallViewDelegate <NSObject>
 
@@ -31,8 +31,11 @@
 
 @end
 
-@interface CallIncomingView : TPMultiLayoutViewController <UICompositeViewDelegate> {
+@interface CallIncomingView : TPMultiLayoutViewController
+{
+    
 }
+
 @property(weak, nonatomic) IBOutlet UILabel *nameLabel;
 @property(nonatomic, strong) IBOutlet UILabel *addressLabel;
 @property(nonatomic, assign) UCSCall *call;

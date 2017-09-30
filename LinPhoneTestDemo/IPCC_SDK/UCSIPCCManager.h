@@ -100,6 +100,9 @@
 - (void)setVideoEnable:(BOOL)enabled;
 
 
++ (NSString *)TextMessageForChat:(LinphoneChatMessage *)message;
++ (NSString *)ContactDateForChat:(LinphoneChatMessage *)message;
+
 /**
  将int转为标准格式的NSString时间
  */

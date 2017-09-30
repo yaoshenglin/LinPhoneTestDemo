@@ -7,8 +7,7 @@
 //
 
 #import "UCSIPCCManager.h"
-
-#define LC ([LinphoneManager getLc])
+#import "Utils.h"
 
 @interface UCSIPCCManager() {
 @public
@@ -439,11 +438,37 @@ static id _ucsIPCCDelegate = nil; //代理对象，用于回调
         linphone_call_params_enable_video(call_params, enabled);
         //linphone_core_update_call(LC, call, call_params);
         linphone_call_update(call, call_params);
+        linphone_call_enable_camera(call, YES);
         //linphone_call_params_destroy(call_params);
         linphone_call_params_unref(call_params);
     } else {
         NSLog(@"Cannot toggle video button, because no current call");
     }
+}
+
++ (NSString *)TextMessageForChat:(LinphoneChatMessage *)message {
+    const char *url = linphone_chat_message_get_external_body_url(message);
+    const LinphoneContent *last_content = linphone_chat_message_get_file_transfer_information(message);
+    if (last_content) {
+        const char *encoding = linphone_content_get_encoding(last_content);
+        NSLog(@"encoding = %s",encoding);
+    }
+    // Last message was a file transfer (image) so display a picture...
+    if (url || last_content) {
+        return @"🗻";
+    } else {
+        const char *text = linphone_chat_message_get_text(message) ?: "";
+        return [NSString stringWithUTF8String:text] ?: [NSString stringWithCString:text encoding:NSASCIIStringEncoding]
+        ?: NSLocalizedString(@"(invalid string)", nil);
+    }
+}
+
++ (NSString *)ContactDateForChat:(LinphoneChatMessage *)message {
+    const LinphoneAddress *address =
+    linphone_chat_message_get_from_address(message)
+    ? linphone_chat_message_get_from_address(message)
+    : linphone_chat_room_get_peer_address(linphone_chat_message_get_chat_room(message));
+    return [NSString stringWithFormat:@"%@ - %@", [LinphoneUtils timeToString:linphone_chat_message_get_time(message) withFormat:LinphoneDateChatBubble], [LinphoneManager displayNameForAddress:address]];
 }
 
 

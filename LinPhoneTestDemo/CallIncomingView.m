@@ -46,7 +46,7 @@ static NSTimer *timer;
 	[super viewWillDisappear:animated];
     [NSNotificationCenter.defaultCenter removeObserver:self];
     [self cancelTimer];
-//    [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
+    //[[UIApplication sharedApplication] setIdleTimerDisabled:YES];
     
 }
 
@@ -62,27 +62,27 @@ static NSTimer *timer;
 
 #pragma mark - UICompositeViewDelegate Functions
 
-static UICompositeViewDescription *compositeDescription = nil;
-
-+ (UICompositeViewDescription *)compositeViewDescription {
-	if (compositeDescription == nil) {
-        compositeDescription = [[UICompositeViewDescription alloc] init:@"CallIncoming"
-                                                                content:@"CallIncomingView"
-                                                               stateBar:@"UIStateBar"
-                                                        stateBarEnabled:true
-                                                                 tabBar:@"UIMainBar"
-                                                          tabBarEnabled:true
-                                                             fullscreen:false
-                                                          landscapeMode:false
-                                                           portraitMode:true];
-		compositeDescription.darkBackground = true;
-	}
-	return compositeDescription;
-}
-
-- (UICompositeViewDescription *)compositeViewDescription {
-	return self.class.compositeViewDescription;
-}
+//static UICompositeViewDescription *compositeDescription = nil;
+//
+//+ (UICompositeViewDescription *)compositeViewDescription {
+//	if (compositeDescription == nil) {
+//        compositeDescription = [[UICompositeViewDescription alloc] init:@"CallIncoming"
+//                                                                content:@"CallIncomingView"
+//                                                               stateBar:@"UIStateBar"
+//                                                        stateBarEnabled:true
+//                                                                 tabBar:@"UIMainBar"
+//                                                          tabBarEnabled:true
+//                                                             fullscreen:false
+//                                                          landscapeMode:false
+//                                                           portraitMode:true];
+//		compositeDescription.darkBackground = true;
+//	}
+//	return compositeDescription;
+//}
+//
+//- (UICompositeViewDescription *)compositeViewDescription {
+//	return self.class.compositeViewDescription;
+//}
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
 	[super didRotateFromInterfaceOrientation:fromInterfaceOrientation];

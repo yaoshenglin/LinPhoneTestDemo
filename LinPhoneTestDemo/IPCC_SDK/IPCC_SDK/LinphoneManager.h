@@ -18,6 +18,7 @@
  */
 
 #import <Foundation/Foundation.h>
+
 //#import <AVFoundation/AVAudioSession.h>
 #import <SystemConfiguration/SCNetworkReachability.h>
 #import <AudioToolbox/AudioToolbox.h>
@@ -35,6 +36,7 @@
 #include "linphone/linphonecore.h"
 #include "linphone/linphone_tunnel.h"
 
+#define LC [LinphoneManager getLc]
 extern const char *const LINPHONERC_APPLICATION_KEY;
 
 extern NSString *const kLinphoneCoreUpdate;
@@ -128,6 +130,7 @@ typedef struct _LinphoneManagerSounds {
 + (BOOL)isCodecSupported: (const char*)codecName;
 + (NSSet *)unsupportedCodecs;
 + (NSString *)getUserAgent;
++ (NSString *)displayNameForAddress:(const LinphoneAddress *)addr;
 + (NSString *)getStateMsg:(int)state;
 + (int)unreadMessageCount;
 
@@ -142,6 +145,7 @@ typedef struct _LinphoneManagerSounds {
 - (void)configurePushTokenForProxyConfig: (LinphoneProxyConfig*)cfg;
 - (BOOL)popPushCallID:(NSString*) callId;
 - (void)acceptCallForCallId:(NSString*)callid;
+- (LinphoneCall *)callByCallId:(NSString *)call_id;
 - (void)cancelLocalNotifTimerForCallId:(NSString*)callid;
 
 + (BOOL)langageDirectionIsRTL;
@@ -202,6 +206,14 @@ typedef struct _LinphoneManagerSounds {
 @property (copy) void (^silentPushCompletion)(UIBackgroundFetchResult);
 @property (readonly) BOOL wasRemoteProvisioned;
 @property (readonly) LpConfig *configDb;
+
+@property BOOL conf;
+@property BOOL nextCallIsTransfer;
+
+#pragma mark UIApplicationDelegate
+- (void)appWillResignActive;
+- (void)appDidBecomeActive;
+- (void)appWillTerminate;
 
 @end
 

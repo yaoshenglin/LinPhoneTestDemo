@@ -203,9 +203,8 @@
     
     [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
     
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                 name:UIDeviceOrientationDidChangeNotification
-                                               object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIDeviceOrientationDidChangeNotification object:nil];
+    //[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
@@ -249,7 +248,8 @@
 
 #pragma mark - Event Functions
 
-- (void)orientationDidChange:(NSNotification*)notif {
+- (void)orientationDidChange:(NSNotification*)notif
+{
     // Update rotation
     UIInterfaceOrientation correctOrientation = [self getCorrectInterfaceOrientation:[[UIDevice currentDevice] orientation]];
     if(currentOrientation != correctOrientation) {
@@ -257,20 +257,46 @@
     }
 }
 
+//- (void)willTransitionToTraitCollection:(UITraitCollection *)newCollection withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+//{
+//    
+//}
+//
+//- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id <UIViewControllerTransitionCoordinator>)coordinator
+//{
+//    //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willOritate:) name:UIApplicationWillChangeStatusBarOrientationNotification object:nil];
+//    //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didOritate:) name:UIApplicationDidChangeStatusBarOrientationNotification object:nil];
+//}
+
+- (void)willOritate:(NSNotification *)notice
+{
+    // 将要旋转的时候
+}
+
+- (void)didOritate:(NSNotification *)notice
+{
+    // 正在旋转
+    // Update rotation
+    UIInterfaceOrientation correctOrientation = [self getCorrectInterfaceOrientation:[[UIDevice currentDevice] orientation]];
+    if(currentOrientation != correctOrientation) {
+        [UICompositeViewController setOrientation:correctOrientation animated:currentOrientation != UIDeviceOrientationUnknown];
+    }
+}
 
 #pragma mark -
 
 /*
  Will simulate a device rotation
  */
-+ (void)setOrientation:(UIInterfaceOrientation)orientation animated:(BOOL)animated {
++ (void)setOrientation:(UIInterfaceOrientation)orientation animated:(BOOL)animated
+{
     UIView *firstResponder = nil;
 
     UIViewController *controller = nil;
 
     controller = [[UIApplication sharedApplication] keyWindow].rootViewController;
     CGRect frame = [[UIScreen mainScreen] bounds];
-    UIInterfaceOrientation oldOrientation = controller.interfaceOrientation;
+    UIInterfaceOrientation oldOrientation = [[UIApplication sharedApplication] statusBarOrientation];
 
     NSTimeInterval animationDuration = animated? 0.3f : 0.0;
 
@@ -292,7 +318,8 @@
     }
 }
 
-+ (UIView*)findFirstResponder:(UIView*)view {
++ (UIView *)findFirstResponder:(UIView*)view
+{
     if (view.isFirstResponder) {
         return view;
     }

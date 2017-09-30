@@ -29,11 +29,17 @@
 
 - (void)initCapacity
 {
+    //设置窗口亮度大小  范围是0.1 -1.0
+    [[UIScreen mainScreen] setBrightness:0.3];
+    //设置屏幕常亮
+    [UIApplication sharedApplication].idleTimerDisabled = YES;
+    
     NSString *barTitle = @"登录";
     self.navigationItem.rightBarButtonItem = [CTB BarButtonWithTitle:barTitle target:self tag:1];
     self.edgesForExtendedLayout = UIRectEdgeNone;
     //[CTB addObserver:self selector:@selector(buttonType) name:kLinphoneCallUpdate object:nil];
     [CTB addTarget:self action:@selector(ButtonEvents:) button:_btnCall,_btnCallVideo, nil];
+    [CTB addObserver:self selector:@selector(onkLinphoneTextReceived:) name:kLinphoneTextReceived object:nil];
     
     UCSIPCCManager *sipCCManager = [UCSIPCCManager instance];
     [sipCCManager startUCSphone];
@@ -170,6 +176,31 @@
 -(void)onAnswer:(UCSCall *)call withState:(UCSCallState)state withMessage:(NSDictionary *) message
 {
     NSLog(@"接听, state = %d , message = %@",state,[message stringForFormat]);
+}
+
+// 媒体流已建立
+- (void)onStreamsRunning:(UCSCall *)call withState:(UCSCallState)state withMessage:(NSDictionary *) message
+{
+    NSLog(@"视频, state = %d , message = %@",state,[message stringForFormat]);
+    //启用视频接听
+    const LinphoneCallParams *params = linphone_call_get_remote_params(call);
+    if (linphone_call_params_video_enabled(params)) {
+        [[UCSIPCCManager instance] setVideoEnable:YES];
+    }
+//    const LinphoneCallParams *params = linphone_call_get_remote_params(call);
+//    if (linphone_call_params_video_enabled(params)) {
+//        linphone_call_enable_camera(call, YES);
+//        linphone_call_params_enable_video((LinphoneCallParams *)params, TRUE);
+//        linphone_call_accept_update(call, params);
+//        
+//        LinphoneCore *lc = [LinphoneManager getLc];
+//        if (call == linphone_core_get_current_call(lc)) {
+//            LinphoneCallParams *lParams = (LinphoneCallParams *)linphone_call_get_current_params(call);
+//            linphone_call_params_enable_video(lParams, TRUE);
+//            linphone_call_accept_update(call, lParams);
+//            //linphone_call_params_unref(lParams);
+//        }
+//    }
 }
 
 // 释放通话回调

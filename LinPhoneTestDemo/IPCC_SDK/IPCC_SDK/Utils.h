@@ -36,6 +36,13 @@ typedef enum _LinphoneLoggerSeverity {
     LinphoneLoggerFatal
 } LinphoneLoggerSeverity;
 
+typedef enum {
+    LinphoneDateHistoryList,
+    LinphoneDateHistoryDetails,
+    LinphoneDateChatList,
+    LinphoneDateChatBubble,
+} LinphoneDateFormat;
+
 
 @interface LinphoneLogger : NSObject
 {
@@ -51,6 +58,7 @@ typedef enum _LinphoneLoggerSeverity {
 
 }
 
++ (NSString *)timeToString:(time_t)time withFormat:(LinphoneDateFormat)format;
 + (BOOL)findAndResignFirstResponder:(UIView*)view;
 + (void)adjustFontSize:(UIView*)view mult:(float)mult;
 + (void)buttonFixStates:(UIButton*)button;

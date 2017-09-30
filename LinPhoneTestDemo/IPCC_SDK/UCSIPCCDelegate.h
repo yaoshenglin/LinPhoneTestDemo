@@ -23,7 +23,10 @@
 - (void)onIncomingCall:(UCSCall *)call withState:(UCSCallState)state withMessage:(NSDictionary *) message;
 
 // 接听回调
--(void)onAnswer:(UCSCall *)call withState:(UCSCallState)state withMessage:(NSDictionary *) message;
+- (void)onAnswer:(UCSCall *)call withState:(UCSCallState)state withMessage:(NSDictionary *) message;
+
+// 媒体流已建立
+- (void)onStreamsRunning:(UCSCall *)call withState:(UCSCallState)state withMessage:(NSDictionary *) message;
 
 // 释放通话回调
 - (void)onHangUp:(UCSCall *)call withState:(UCSCallState)state withMessage:(NSDictionary *) message;
