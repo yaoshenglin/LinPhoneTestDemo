@@ -13,6 +13,8 @@
 @property (weak, nonatomic) IBOutlet UITextField *txtDomain;
 @property (weak, nonatomic) IBOutlet UIButton *btnCall;
 @property (weak, nonatomic) IBOutlet UIButton *btnCallVideo;
+@property (weak, nonatomic) IBOutlet UIButton *btnSend;
+@property (weak, nonatomic) IBOutlet UITextField *txtTextMsg;
 
 @end
 

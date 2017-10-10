@@ -476,10 +476,7 @@ static id _ucsIPCCDelegate = nil; //代理对象，用于回调
 
 + (NSString *)ContactDateForChat:(LinphoneChatMessage *)message
 {
-    const LinphoneAddress *address =
-    linphone_chat_message_get_from_address(message)
-    ? linphone_chat_message_get_from_address(message)
-    : linphone_chat_room_get_peer_address(linphone_chat_message_get_chat_room(message));
+    const LinphoneAddress *address = linphone_chat_message_get_from_address(message) ? linphone_chat_message_get_from_address(message) : linphone_chat_room_get_peer_address(linphone_chat_message_get_chat_room(message));
     return [NSString stringWithFormat:@"%@ - %@", [LinphoneUtils timeToString:linphone_chat_message_get_time(message) withFormat:LinphoneDateChatBubble], [LinphoneManager displayNameForAddress:address]];
 }
 

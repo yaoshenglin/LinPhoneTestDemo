@@ -14,7 +14,10 @@
 #import "CallIncomingView.h"
 #import "CallOutgoingView.h"
 
-@interface ViewController () <UCSIPCCDelegate>
+@interface ViewController () <UCSIPCCDelegate,UITextFieldDelegate>
+{
+    LinphoneChatRoom *currentRoom;
+}
 
 @end
 
@@ -38,7 +41,7 @@
     self.navigationItem.rightBarButtonItem = [CTB BarButtonWithTitle:barTitle target:self tag:1];
     self.edgesForExtendedLayout = UIRectEdgeNone;
     //[CTB addObserver:self selector:@selector(buttonType) name:kLinphoneCallUpdate object:nil];
-    [CTB addTarget:self action:@selector(ButtonEvents:) button:_btnCall,_btnCallVideo, nil];
+    [CTB addTarget:self action:@selector(ButtonEvents:) button:_btnCall,_btnCallVideo,_btnSend, nil];
     [CTB addObserver:self selector:@selector(onkLinphoneTextReceived:) name:kLinphoneTextReceived object:nil];
     
     UCSIPCCManager *sipCCManager = [UCSIPCCManager instance];
@@ -93,6 +96,22 @@
     else if (button.tag == 3) {
         [self callEventsWithEnableVideo:YES];
     }
+    else if (button.tag == 4) {
+        NSString *replyText = _txtTextMsg.text;
+        if (![self isLogin]) {
+            [self.view makeToast:@"请先登录"];
+            return;
+        }
+        else if (!currentRoom) {
+            [self.view makeToast:@"获取房间号失败"];
+            return;
+        }
+        else if (replyText.length <= 0) {
+            [self.view makeToast:@"发送内容不能为空"];
+            return;
+        }
+        [UCSIPCCManager sendTextWithRoom:currentRoom message:replyText];
+    }
 }
 
 - (void)callEventsWithEnableVideo:(BOOL)enable
@@ -101,21 +120,27 @@
         return;
     }
     
-    NSString *address = _txtDomain.text;
+    NSString *addressStr = _txtDomain.text;
     
     // 获取昵称
     NSString *displayName = [UCSUserDefaultManager GetLocalDataString:@"login_displayName"];
     
-    if( [address length] == 0) {
-        address = [UCSUserDefaultManager GetLocalDataString:@"Last_Call_Address"];
-        _txtDomain.text = address;
+    if( [addressStr length] == 0) {
+        addressStr = [UCSUserDefaultManager GetLocalDataString:@"Last_Call_Address"];
+        _txtDomain.text = addressStr;
         return;
     }
     
-    if( [address length] > 0) {
-        [UCSUserDefaultManager SetLocalDataString:address key:@"Last_Call_Address"];
-        [[UCSIPCCManager instance] call:address displayName:displayName transfer:NO enableVideo:enable];
+    if( [addressStr length] > 0) {
+        [UCSUserDefaultManager SetLocalDataString:addressStr key:@"Last_Call_Address"];
+        [[UCSIPCCManager instance] call:addressStr displayName:displayName transfer:NO enableVideo:enable];
     }
+}
+
+#pragma mark - --------UITextFieldDelegate------------------------
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    return YES;
 }
 
 #pragma mark - --------UCSIPCCDelegate------------------------
@@ -238,8 +263,8 @@
     NSLog(@"textMsg = %@",textMsg);
     
     NSString *replyText = @"收到消息";
-    LinphoneChatRoom *room = linphone_chat_message_get_chat_room(message);
-    [UCSIPCCManager sendTextWithRoom:room message:replyText];
+    currentRoom = linphone_chat_message_get_chat_room(message);
+    [UCSIPCCManager sendTextWithRoom:currentRoom message:replyText];
 }
 
 #pragma mark
