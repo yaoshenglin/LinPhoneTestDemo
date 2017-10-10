@@ -100,6 +100,7 @@
 - (void)setVideoEnable:(BOOL)enabled;
 
 
++ (void)sendTextWithRoom:(LinphoneChatRoom *)room message:(NSString *)text;
 + (NSString *)TextMessageForChat:(LinphoneChatMessage *)message;
 + (NSString *)ContactDateForChat:(LinphoneChatMessage *)message;
 

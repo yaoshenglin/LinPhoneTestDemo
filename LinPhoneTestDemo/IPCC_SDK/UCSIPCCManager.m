@@ -446,7 +446,18 @@ static id _ucsIPCCDelegate = nil; //代理对象，用于回调
     }
 }
 
-+ (NSString *)TextMessageForChat:(LinphoneChatMessage *)message {
++ (void)sendTextWithRoom:(LinphoneChatRoom *)room message:(NSString *)text
+{
+    if (!room || !text) {
+        NSLog(@"发送信息失败, %@ %@",room,text);
+        return;
+    }
+    LinphoneChatMessage *msg = linphone_chat_room_create_message(room, text.UTF8String);
+    linphone_chat_room_send_chat_message(room, linphone_chat_message_ref(msg));
+}
+
++ (NSString *)TextMessageForChat:(LinphoneChatMessage *)message
+{
     const char *url = linphone_chat_message_get_external_body_url(message);
     const LinphoneContent *last_content = linphone_chat_message_get_file_transfer_information(message);
     if (last_content) {
@@ -463,7 +474,8 @@ static id _ucsIPCCDelegate = nil; //代理对象，用于回调
     }
 }
 
-+ (NSString *)ContactDateForChat:(LinphoneChatMessage *)message {
++ (NSString *)ContactDateForChat:(LinphoneChatMessage *)message
+{
     const LinphoneAddress *address =
     linphone_chat_message_get_from_address(message)
     ? linphone_chat_message_get_from_address(message)
@@ -477,7 +489,8 @@ static id _ucsIPCCDelegate = nil; //代理对象，用于回调
  
   将int转为标准格式的NSString时间
  */
-+ (NSString *)durationToString:(int)duration {
++ (NSString *)durationToString:(int)duration
+{
     NSMutableString *result = [[NSMutableString alloc] init];
     if (duration / 3600 > 0) {
         [result appendString:[NSString stringWithFormat:@"%02i:", duration / 3600]];
