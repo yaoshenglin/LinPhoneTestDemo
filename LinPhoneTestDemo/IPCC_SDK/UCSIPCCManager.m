@@ -161,7 +161,15 @@ static id _ucsIPCCDelegate = nil; //代理对象，用于回调
     }
     if( domain && [domain length] != 0) {
         if( transport != nil ){
-            server_address = [NSString stringWithFormat:@"%@:%@;transport=%@", server_address, port, [transport lowercaseString]];
+            NSString *value = [NSString stringWithFormat:@"%@:%@;transport=%@", server_address, port, [transport lowercaseString]];
+            if (port.length <= 0) {
+                value = [NSString stringWithFormat:@"%@;transport=%@", server_address, [transport lowercaseString]];
+            }
+            
+            server_address = value;
+#ifdef DEBUG
+            NSLog(@"server_address = %@",server_address);
+#endif
         }
         // when the domain is specified (for external login), take it as the server address
         linphone_proxy_config_set_server_addr(proxyCfg, [server_address UTF8String]);

@@ -112,7 +112,7 @@
     
     if (name.length != 0 && password.length != 0 && domain.length != 0 && port.length != 0) {
         // 自动设置注册信息
-        [[UCSIPCCManager instance] addProxyConfig:name password:password displayName:displayName domain:domain port:port withTransport:transport];
+        [[UCSIPCCManager instance] addProxyConfig:name password:password displayName:displayName domain:domain port:nil withTransport:transport];
     }
 }
 

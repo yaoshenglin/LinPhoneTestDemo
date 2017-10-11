@@ -212,20 +212,6 @@
     if (linphone_call_params_video_enabled(params)) {
         [[UCSIPCCManager instance] setVideoEnable:YES];
     }
-//    const LinphoneCallParams *params = linphone_call_get_remote_params(call);
-//    if (linphone_call_params_video_enabled(params)) {
-//        linphone_call_enable_camera(call, YES);
-//        linphone_call_params_enable_video((LinphoneCallParams *)params, TRUE);
-//        linphone_call_accept_update(call, params);
-//        
-//        LinphoneCore *lc = [LinphoneManager getLc];
-//        if (call == linphone_core_get_current_call(lc)) {
-//            LinphoneCallParams *lParams = (LinphoneCallParams *)linphone_call_get_current_params(call);
-//            linphone_call_params_enable_video(lParams, TRUE);
-//            linphone_call_accept_update(call, lParams);
-//            //linphone_call_params_unref(lParams);
-//        }
-//    }
 }
 
 // 释放通话回调

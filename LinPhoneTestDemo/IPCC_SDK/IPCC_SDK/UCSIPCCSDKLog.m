@@ -16,7 +16,7 @@
     //    NSLog(@"%@ -- %@", summary, detail);
     
     NSString *strSummary = nil;
-    if (nil != summary)
+    if (summary)
     {
         strSummary = [NSString stringWithString:summary];
     }
@@ -26,7 +26,7 @@
     }
     
     NSString *strDetail = @"";
-    if (nil != detail)
+    if (detail)
     {
         strDetail = [NSString stringWithString:detail];
     }
