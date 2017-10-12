@@ -50,11 +50,14 @@
     NSString *timeString = [NSMutableString stringWithFormat:@"%@",[formatter stringFromDate:yesterday]];
     //[formatter release];
     
+    printf("\n=============sdk日志=============\n");
+    printf("时间 : %s\n",timeString.UTF8String);
+    printf("事件 : %s\n",strSummary.UTF8String);
+    printf("strDetail:\r%s\n",strDetail.UTF8String);
+    
+    
     NSString *url = [NSString stringWithFormat:@"\n=============sdk日志=============\n时间 : %@\nSummary:\r%@\n\nstrDetail:\r%@\n",timeString,strSummary,strDetail];
     NSString *path = demo_applicationDocumentsDirectory();// stringByAppendingPathComponent:@"Exception.txt"];
-    
-    NSLog(@"%@",url);
-    
     //一次性读写
     //[url writeToFile:path atomically:YES encoding:(NSUTF8StringEncoding) error:nil];
     

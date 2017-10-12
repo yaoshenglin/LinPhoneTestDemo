@@ -1565,16 +1565,16 @@ static BOOL libStarted = FALSE;
 	NSError* err;
 
 	if( ![audioSession setActive:NO error: &err] && err ){
-//		NSLog(@"audioSession setActive failed: %@", [err description]);
+		NSLog(@"audioSession setActive failed: %@", [err description]);
 	}
 	if(!bAudioInputAvailable){
-		UIAlertView* error = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"No microphone",nil)
+		UIAlertView* alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"No microphone",nil)
 														message:NSLocalizedString(@"You need to plug a microphone to your device to use this application.",nil)
 													   delegate:nil
 											  cancelButtonTitle:NSLocalizedString(@"Ok",nil)
 											  otherButtonTitles:nil ,nil];
-		[error show];
-		[error release];
+		[alert show];
+		[alert release];
 	}
 
 	if ([UIApplication sharedApplication].applicationState ==  UIApplicationStateBackground) {
@@ -1592,7 +1592,7 @@ static BOOL libStarted = FALSE;
 	}
 	[LinphoneLogger logc:LinphoneLoggerLog format:"Create linphonecore"];
 
-	connectivity=none;
+	connectivity = none;
 
     //ms_init(); // Need to initialize mediastreamer2 before loading the plugins
     ms_factory_new();
@@ -1617,16 +1617,8 @@ static BOOL libStarted = FALSE;
 #endif
 
     /*to make sure we don't loose debug trace*/
-    BOOL lpConfig = [self lpConfigBoolForKey:@"debugenable_preference"];
-    if (lpConfig) {
-        linphone_core_set_log_handler((OrtpLogFunc)linphone_iphone_log_handler);
-        linphone_core_set_log_level(ORTP_NONE);
-        //linphone_core_enable_logs_with_cb((OrtpLogFunc)linphone_iphone_log_handler);
-        ortp_set_log_level_mask("ios",ORTP_DEBUG|ORTP_MESSAGE|ORTP_WARNING|ORTP_ERROR|ORTP_FATAL);
-		/*must be done before creating linphone core to get its traces too*/
-    }
-	linphone_core_set_log_collection_path([[LinphoneManager cacheDirectory] UTF8String]);
-	linphone_core_enable_log_collection([self lpConfigBoolForKey:@"debugenable_preference"]);
+    linphone_core_set_log_collection_path([[LinphoneManager cacheDirectory] UTF8String]);
+    [self setLogsEnabled:YES];
 
 
     //LinphoneFactory *factory = linphone_factory_get();
@@ -2051,26 +2043,26 @@ static void audioRouteChangeListenerCallback (void *inUserData,                 
 - (void)call:(NSString *)address displayName:(NSString*)displayName transfer:(BOOL)transfer enableVideo:(BOOL)enable
 {
 	if (!linphone_core_is_network_reachable(theLinphoneCore)) {
-		UIAlertView* error = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Network Error",nil)
+		UIAlertView* alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Network Error",nil)
 														message:NSLocalizedString(@"There is no network connection available, enable WIFI or WWAN prior to place a call",nil)
 													   delegate:nil
 											  cancelButtonTitle:NSLocalizedString(@"Continue",nil)
 											  otherButtonTitles:nil];
-		[error show];
-		[error release];
+		[alert show];
+		[alert release];
 		return;
 	}
 
 	CTCallCenter* callCenter = [[CTCallCenter alloc] init];
 	if ([callCenter currentCalls]!=nil) {
 		[LinphoneLogger logc:LinphoneLoggerError format:"GSM call in progress, cancelling outgoing SIP call request"];
-		UIAlertView* error = [[UIAlertView alloc]	initWithTitle:NSLocalizedString(@"Cannot make call",nil)
+		UIAlertView* alert = [[UIAlertView alloc]	initWithTitle:NSLocalizedString(@"Cannot make call",nil)
 														message:NSLocalizedString(@"Please terminate GSM call",nil)
 													   delegate:nil
 											  cancelButtonTitle:NSLocalizedString(@"Continue",nil)
 											  otherButtonTitles:nil];
-		[error show];
-		[error release];
+		[alert show];
+		[alert release];
 		[callCenter release];
 		return;
 	}
@@ -2096,13 +2088,13 @@ static void audioRouteChangeListenerCallback (void *inUserData,                 
 
 	if ([address length] == 0) return; //just return
     if( !addressIsASCII ){
-        UIAlertView* error = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Invalid SIP address",nil)
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Invalid SIP address",nil)
                                                         message:NSLocalizedString(@"The address should only contain ASCII data",nil)
                                                        delegate:nil
                                               cancelButtonTitle:NSLocalizedString(@"Continue",nil)
                                               otherButtonTitles:nil];
-        [error show];
-        [error release];
+        [alert show];
+        [alert release];
 
     }
 	LinphoneAddress* linphoneAddress = linphone_core_interpret_url(theLinphoneCore, [address cStringUsingEncoding:[NSString defaultCStringEncoding]]);
@@ -2127,13 +2119,13 @@ static void audioRouteChangeListenerCallback (void *inUserData,                 
 
 	} else {
 
-		UIAlertView* error = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Invalid SIP address",nil)
+		UIAlertView* alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Invalid SIP address",nil)
 														message:NSLocalizedString(@"Either configure a SIP proxy server from settings prior to place a call or use a valid SIP address (I.E sip:john@example.net)",nil)
 													   delegate:nil
 											  cancelButtonTitle:NSLocalizedString(@"Continue",nil)
 											  otherButtonTitles:nil];
-		[error show];
-		[error release];
+		[alert show];
+		[alert release];
 
     }
 
@@ -2288,14 +2280,13 @@ static void audioRouteChangeListenerCallback (void *inUserData,                 
 
 -(void)setLogsEnabled:(BOOL)enabled {
 	if (enabled) {
-        linphone_core_set_log_handler((OrtpLogFunc)linphone_iphone_log_handler);
-        linphone_core_set_log_level(ORTP_NONE);
-		//linphone_core_enable_logs_with_cb((OrtpLogFunc)linphone_iphone_log_handler);
+        //linphone_core_set_log_handler((OrtpLogFunc)linphone_iphone_log_handler);
+        //linphone_core_set_log_level(ORTP_DEBUG);
 		ortp_set_log_level_mask("ios",ORTP_DEBUG|ORTP_MESSAGE|ORTP_WARNING|ORTP_ERROR|ORTP_FATAL);
 		linphone_core_enable_log_collection(enabled);
 	} else {
 		linphone_core_enable_log_collection(enabled);
-        linphone_core_set_log_level(0);
+        linphone_core_set_log_level(ORTP_NONE);
 	}
 }
 

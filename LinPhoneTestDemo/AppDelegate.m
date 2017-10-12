@@ -27,7 +27,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
-    NSLog(@"程序启动 %@",[launchOptions stringForFormat] ?: [application customDescription]);
+    NSLog(@"程序启动, statusBarFrame:%@, statusBarOrientationAnimationDuration:%@",[application valueForKey:@"statusBarFrame"],[application valueForKey:@"statusBarOrientationAnimationDuration"]);
     [UCSUserDefaultManager SetLocalDataString:@"TLS" key:@"login_transport"];   // 默认UDP接入,TLS
     [self setNotification:application];
     [self setUCSSDK];

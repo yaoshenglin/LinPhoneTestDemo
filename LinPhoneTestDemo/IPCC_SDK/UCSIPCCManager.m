@@ -99,7 +99,7 @@ static id _ucsIPCCDelegate = nil; //代理对象，用于回调
 - (void)startUCSphone {
     
     [[LinphoneManager instance] startLibLinphone];
-    [UCSIPCCSDKLog saveDemoLogInfo:@"初始化成功" withDetail:nil];
+    [UCSIPCCSDKLog saveDemoLogInfo:@"初始化成功" withDetail:@"startLinphone"];
     
 }
 
