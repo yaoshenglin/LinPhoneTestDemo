@@ -99,7 +99,7 @@ static id _ucsIPCCDelegate = nil; //代理对象，用于回调
 - (void)startUCSphone {
     
     [[LinphoneManager instance] startLibLinphone];
-    [UCSIPCCSDKLog saveDemoLogInfo:@"初始化成功" withDetail:@"startLinphone"];
+    [UCSIPCCSDKLog saveDemoLogInfo:@"初始化完成" withDetail:@"startLinphone"];
     NSLog(@"linphone version : %s",linphone_core_get_version());
 }
 
@@ -156,8 +156,8 @@ static id _ucsIPCCDelegate = nil; //代理对象，用于回调
     
     LinphoneAddress* linphoneAddress = linphone_address_new(identity);
     linphone_address_set_username(linphoneAddress, normalizedUserName);
-    if (displayName && displayName.length != 0) {
-        linphone_address_set_display_name(linphoneAddress, (displayName.length ? displayName.UTF8String : NULL));
+    if (displayName.length > 0) {
+        linphone_address_set_display_name(linphoneAddress, displayName.UTF8String);
     }
     if( domain && [domain length] != 0) {
         if( transport != nil ){
@@ -191,7 +191,7 @@ static id _ucsIPCCDelegate = nil; //代理对象，用于回调
     [self clearProxyConfig];
     
     //linphone_proxy_config_set_identity(proxyCfg, identity);
-    linphone_proxy_config_set_identity_address(proxyCfg, linphoneAddress);//会崩溃
+    linphone_proxy_config_set_identity_address(proxyCfg, linphoneAddress);//
     linphone_proxy_config_set_expires(proxyCfg, 2000);
     linphone_proxy_config_enable_register(proxyCfg, true);
     linphone_core_add_auth_info(lc, info);
@@ -265,14 +265,17 @@ static id _ucsIPCCDelegate = nil; //代理对象，用于回调
 - (NSString *)getAccount
 {
     NSString *username = nil;
-    LinphoneProxyConfig *defaultProxy = linphone_core_get_default_proxy_config(LC);
-    if (defaultProxy) {
-        const LinphoneAddress *address = linphone_proxy_config_get_identity_address(defaultProxy);
-        const char *name = linphone_address_get_username(address);
-        username = [NSString stringWithCString:name encoding:NSUTF8StringEncoding];
-        
-        //const char *identity = linphone_proxy_config_get_identity(defaultProxy);
-        //NSLog(@"identity = %@",[NSString stringWithUTF8String:identity]);
+    if (LC) {
+        LinphoneProxyConfig *proxy = linphone_core_get_default_proxy_config(LC);
+        if (proxy) {
+            const LinphoneAddress *address = linphone_proxy_config_get_identity_address(proxy);
+            if (address) {
+                const char *name = linphone_address_get_username(address);
+                if (name) {
+                    username = [NSString stringWithUTF8String:name];
+                }
+            }
+        }
     }
     
     return username;
@@ -426,7 +429,7 @@ static id _ucsIPCCDelegate = nil; //代理对象，用于回调
         return nil;
     }
     const LinphoneAddress *address = linphone_core_get_current_call_remote_address(LC);
-//    LinphoneAddress *parsed = linphone_core_get_primary_contact_parsed(LC);
+    //LinphoneAddress *parsed = linphone_core_get_primary_contact_parsed(LC);
     
     const char *uri = linphone_address_get_display_name(address);
     if (uri) {

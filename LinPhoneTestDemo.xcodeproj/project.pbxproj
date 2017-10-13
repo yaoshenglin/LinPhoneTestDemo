@@ -63,7 +63,7 @@
 		1455E5E21F579EB100044DE0 /* UCSIPCCManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1455E5E11F579EB100044DE0 /* UCSIPCCManager.m */; };
 		1455E5E41F579EBB00044DE0 /* UCSIPCCClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 1455E5E31F579EBB00044DE0 /* UCSIPCCClass.m */; };
 		1455E5F21F579EED00044DE0 /* ColorSpaceUtilites.m in Sources */ = {isa = PBXBuildFile; fileRef = 1455E5E61F579EED00044DE0 /* ColorSpaceUtilites.m */; };
-		1455E5F31F579EED00044DE0 /* FastAddressBook.m in Sources */ = {isa = PBXBuildFile; fileRef = 1455E5E91F579EED00044DE0 /* FastAddressBook.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		1455E5F31F579EED00044DE0 /* FastAddressBook.m in Sources */ = {isa = PBXBuildFile; fileRef = 1455E5E91F579EED00044DE0 /* FastAddressBook.m */; };
 		1455E5F41F579EED00044DE0 /* LinphoneManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1455E5EB1F579EED00044DE0 /* LinphoneManager.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		1455E5F51F579EED00044DE0 /* UCSIPCCSDKLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 1455E5ED1F579EED00044DE0 /* UCSIPCCSDKLog.m */; };
 		1455E5F61F579EED00044DE0 /* UILinphone.m in Sources */ = {isa = PBXBuildFile; fileRef = 1455E5EF1F579EED00044DE0 /* UILinphone.m */; };
