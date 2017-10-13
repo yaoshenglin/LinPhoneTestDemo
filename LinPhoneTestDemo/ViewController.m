@@ -156,6 +156,13 @@
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"登录成功" delegate:self cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
         alert.tag = state;
         [alert show];
+        
+        const char *name = linphone_core_get_identity(LC);
+        printf("name = %s\n",name);
+        if (name) {
+            NSString *userName = [UCSIPCCManager.instance getAccount];
+            NSLog(@"userName = %@",userName);
+        }
     }
     else if (state == UCSRegistrationFailed) {
         NSString *msgs = msg.length > 0 ? [@"登录失败" stringByAppendingFormat:@"\n%@",msg] : @"登录失败";

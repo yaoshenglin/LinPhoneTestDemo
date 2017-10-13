@@ -193,9 +193,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{[LinphoneManager.instance setPushNotificationToken:nil];});
 }
 
-- (void)pushRegistry:(PKPushRegistry *)registry
-didReceiveIncomingPushWithPayload:(PKPushPayload *)payload
-             forType:(NSString *)type
+- (void)pushRegistry:(PKPushRegistry *)registry didReceiveIncomingPushWithPayload:(PKPushPayload *)payload forType:(NSString *)type
 {
     NSLog(@"PushKit : incoming voip notfication: %@", payload.dictionaryPayload);
     NSLog(@"pushkit --- voip信息通知");

@@ -54,6 +54,14 @@
 
 
 /**
+ 获取登录账号
+ 
+ @return 用户名
+ */
+- (NSString *)getAccount;
+
+
+/**
  拨打电话
  */
 - (void)call:(NSString *)address displayName:(NSString*)displayName transfer:(BOOL)transfer enableVideo:(BOOL)enable;

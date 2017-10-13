@@ -459,7 +459,8 @@ static int check_should_migrate_images(void* data ,int argc,char** argv,char** c
 
 		// replace empty from: or to: by the current identity.
 		if( default_proxy ){
-			identity = linphone_proxy_config_get_identity(default_proxy);
+			//identity = linphone_proxy_config_get_identity(default_proxy);
+            identity = linphone_core_get_identity(LC);
             const LinphoneAddress *addr = linphone_proxy_config_get_identity_address(default_proxy);
             const char *value1 = linphone_address_get_username(addr);
             const char *value2 = linphone_address_get_scheme(addr);
@@ -1618,7 +1619,7 @@ static BOOL libStarted = FALSE;
 
     /*to make sure we don't loose debug trace*/
     linphone_core_set_log_collection_path([[LinphoneManager cacheDirectory] UTF8String]);
-    [self setLogsEnabled:YES];
+    [self setLogsEnabled:NO];
 
 
     //LinphoneFactory *factory = linphone_factory_get();

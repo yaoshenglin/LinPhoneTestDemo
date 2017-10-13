@@ -20,28 +20,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "LinPhoneTestDemo/IPCC_SDK/IPCC_SDK/LinphoneManager.m"
-            timestampString = "528371966.392335"
+            timestampString = "529493201.863773"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1525"
-            endingLineNumber = "1525"
+            startingLineNumber = "1526"
+            endingLineNumber = "1526"
             landmarkName = "-finishCoreConfiguration"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "LinPhoneTestDemo/IPCC_SDK/IPCC_SDK/LinphoneManager.m"
-            timestampString = "528371966.392335"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "466"
-            endingLineNumber = "466"
-            landmarkName = "-migrateChatDBIfNeeded:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -68,11 +52,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "LinPhoneTestDemo/IPCC_SDK/IPCC_SDK/LinphoneManager.m"
-            timestampString = "528371966.392335"
+            timestampString = "529493201.863773"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "658"
-            endingLineNumber = "658"
+            startingLineNumber = "659"
+            endingLineNumber = "659"
             landmarkName = "-displayStatus:"
             landmarkType = "7">
          </BreakpointContent>

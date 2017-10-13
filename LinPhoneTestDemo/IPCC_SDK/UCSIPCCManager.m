@@ -100,7 +100,7 @@ static id _ucsIPCCDelegate = nil; //代理对象，用于回调
     
     [[LinphoneManager instance] startLibLinphone];
     [UCSIPCCSDKLog saveDemoLogInfo:@"初始化成功" withDetail:@"startLinphone"];
-    
+    NSLog(@"linphone version : %s",linphone_core_get_version());
 }
 
 /**
@@ -254,6 +254,28 @@ static id _ucsIPCCDelegate = nil; //代理对象，用于回调
     
     [lm configurePushTokenForProxyConfig:proxyCfg];
     
+}
+
+
+/**
+ 获取登录账号
+ 
+ @return 用户名
+ */
+- (NSString *)getAccount
+{
+    NSString *username = nil;
+    LinphoneProxyConfig *defaultProxy = linphone_core_get_default_proxy_config(LC);
+    if (defaultProxy) {
+        const LinphoneAddress *address = linphone_proxy_config_get_identity_address(defaultProxy);
+        const char *name = linphone_address_get_username(address);
+        username = [NSString stringWithCString:name encoding:NSUTF8StringEncoding];
+        
+        //const char *identity = linphone_proxy_config_get_identity(defaultProxy);
+        //NSLog(@"identity = %@",[NSString stringWithUTF8String:identity]);
+    }
+    
+    return username;
 }
 
 
