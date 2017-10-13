@@ -160,7 +160,7 @@ static id _ucsIPCCDelegate = nil; //代理对象，用于回调
         linphone_address_set_display_name(linphoneAddress, displayName.UTF8String);
     }
     if( domain && [domain length] != 0) {
-        if( transport != nil ){
+        if( transport.length > 0){
             NSString *value = [NSString stringWithFormat:@"%@:%@;transport=%@", server_address, port, [transport lowercaseString]];
             if (port.length <= 0) {
                 value = [NSString stringWithFormat:@"%@;transport=%@", server_address, [transport lowercaseString]];

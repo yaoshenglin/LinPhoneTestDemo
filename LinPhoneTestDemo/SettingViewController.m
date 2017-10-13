@@ -109,7 +109,7 @@ static NSTimer *timer;
 - (IBAction)readyToSip:(id)sender
 {
     //Login
-    if (self.text_userName.text.length == 0 || self.text_password.text.length == 0  || self.text_domain.text.length == 0  || self.text_port.text.length == 0 ) {
+    if (self.text_userName.text.length == 0 || self.text_password.text.length == 0  || self.text_domain.text.length == 0) {
         return;
     }
     
