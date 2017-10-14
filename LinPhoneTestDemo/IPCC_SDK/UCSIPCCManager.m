@@ -106,11 +106,11 @@ static id _ucsIPCCDelegate = nil; //代理对象，用于回调
 /**
  设置来电超时自动挂断时间
  */
-- (void)setTimeOut
+- (void)setTimeOut:(int)seconds
 {
     //默认30s
     LinphoneCore *lc = [LinphoneManager getLc];
-    linphone_core_set_inc_timeout(lc,60);// 来电超时自动挂断时间设置
+    linphone_core_set_inc_timeout(lc, seconds);// 来电超时自动挂断时间设置
 }
 
 

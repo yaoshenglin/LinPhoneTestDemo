@@ -2149,6 +2149,9 @@ static void audioRouteChangeListenerCallback (void *inUserData,                 
 #pragma mark - Property Functions
 
 - (void)setPushNotificationToken:(NSData *)apushNotificationToken {
+    if (!theLinphoneCore) {
+        return;
+    }
 	if(apushNotificationToken == pushNotificationToken) {
 		return;
 	}

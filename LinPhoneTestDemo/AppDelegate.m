@@ -58,43 +58,21 @@
     //linphone
     
     //设置push
-    _pushRegistry = [[PKPushRegistry alloc] initWithQueue:dispatch_get_main_queue()];
+    [self registerPKPush];
+}
+
+- (void)registerPKPush
+{
+    _pushRegistry = [[PKPushRegistry alloc]initWithQueue:dispatch_get_main_queue()];
+    
     _pushRegistry.delegate = self;
     _pushRegistry.desiredPushTypes = [NSSet setWithObject:PKPushTypeVoIP];
     
-    UIApplication *app = [UIApplication sharedApplication];
-    UIApplicationState state = app.applicationState;
+    UIUserNotificationType types = (UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert);
     
-    [app setMinimumBackgroundFetchInterval:UIApplicationBackgroundFetchIntervalMinimum];
+    UIUserNotificationSettings * notificationSettings = [UIUserNotificationSettings settingsForTypes:types categories:nil];
     
-    LinphoneManager *instance = [LinphoneManager instance];
-    
-    BOOL background_mode = [instance lpConfigBoolForKey:@"backgroundmode_preference"];
-    BOOL start_at_boot = [instance lpConfigBoolForKey:@"start_at_boot_preference"];
-    if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_9_x_Max) {
-//        self.del = [[ProviderDelegate alloc] init];
-//        [LinphoneManager.instance setProviderDelegate:self.del];
-    }
-    
-    if (state == UIApplicationStateBackground) {
-        
-        if (!start_at_boot || !background_mode) {
-            NSLog(@"Linphone launch doing nothing because start_at_boot or background_mode are not activated.", NULL);
-            return;
-        }
-    }
-    
-    bgStartId = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-        NSLog(@"Background task for application launching expired.");
-        [[UIApplication sharedApplication] endBackgroundTask:bgStartId];
-    }];
-    //[application registerForRemoteNotifications];
-    [LinphoneManager.instance startLibLinphone];
-    
-    if (bgStartId!=UIBackgroundTaskInvalid) {
-        [[UIApplication sharedApplication] endBackgroundTask:bgStartId];
-        NSLog(@"结束后台进程");
-    }
+    [[UIApplication sharedApplication]registerUserNotificationSettings:notificationSettings];
 }
 
 - (void)setUCSSDK
@@ -132,13 +110,13 @@
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
     NSLog(@"%@ : %@", NSStringFromSelector(_cmd), deviceToken);
-    [LinphoneManager.instance setPushNotificationToken:deviceToken];
+    //[LinphoneManager.instance setPushNotificationToken:deviceToken];
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
     NSLog(@"%@ : %@", NSStringFromSelector(_cmd), [error localizedDescription]);
-    [LinphoneManager.instance setPushNotificationToken:nil];
+    //[LinphoneManager.instance setPushNotificationToken:nil];
 }
 
 #pragma mark UIApplicationDelegate
@@ -314,6 +292,10 @@
      */
     
     //推送token到服务器
+    NSString *str = [NSString stringWithFormat:@"%@",credentials.token];
+    NSString *_tokenStr = [[[str stringByReplacingOccurrencesOfString:@"<" withString:@""]
+                            stringByReplacingOccurrencesOfString:@">" withString:@""] stringByReplacingOccurrencesOfString:@" " withString:@""];
+    NSLog(@"device_token is %@" , _tokenStr);
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [LinphoneManager.instance setPushNotificationToken:credentials.token];

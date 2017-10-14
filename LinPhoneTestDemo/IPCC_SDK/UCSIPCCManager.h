@@ -37,7 +37,7 @@
 /**
  设置来电超时自动挂断时间
  */
-- (void)setTimeOut;
+- (void)setTimeOut:(int)seconds;
 
 - (int)getTimeout;
 

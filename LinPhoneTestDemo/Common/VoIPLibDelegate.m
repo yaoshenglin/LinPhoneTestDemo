@@ -79,6 +79,7 @@ static VoIPLibDelegate *theVoIPLibDelegate = nil;
     
     if (state == UCSRegistrationOk) {
         //buss.voipLogin.isLogin = YES;
+        //[LinphoneManager.instance setPushNotificationToken:buss.voipLogin.token];
     }
     else if (state == UCSRegistrationFailed) {
         //buss.voipLogin.isLogin = NO;
