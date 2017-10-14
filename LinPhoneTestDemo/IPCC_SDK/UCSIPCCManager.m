@@ -464,16 +464,15 @@ static id _ucsIPCCDelegate = nil; //代理对象，用于回调
     
     LinphoneCall *call = linphone_core_get_current_call(LC);
     if (call) {
-        LinphoneCallAppData *callAppData = (__bridge LinphoneCallAppData *)linphone_call_get_user_pointer(call);
-        callAppData->videoRequested =
-        TRUE; /* will be used later to notify user if video was not activated because of the linphone core*/
-        LinphoneCallParams *call_params = linphone_core_create_call_params(LC,call);
-        linphone_call_params_enable_video(call_params, enabled);
+        LinphoneCallAppData *callAppData = (__bridge LinphoneCallAppData *)(linphone_call_get_user_data(call));
+        callAppData->videoRequested = NO; /* will be used later to notify user if video was not activated because of the linphone core*/
+        LinphoneCallParams *callParams = linphone_core_create_call_params(LC,call);
+        linphone_call_params_enable_video(callParams, enabled);
         //linphone_core_update_call(LC, call, call_params);
-        linphone_call_update(call, call_params);
+        linphone_call_update(call, callParams);
         linphone_call_enable_camera(call, YES);
         //linphone_call_params_destroy(call_params);
-        linphone_call_params_unref(call_params);
+        linphone_call_params_unref(callParams);
     } else {
         NSLog(@"Cannot toggle video button, because no current call");
     }

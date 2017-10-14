@@ -13,10 +13,11 @@
 #import "UCSUserDefaultManager.h"
 #import "CallIncomingView.h"
 #import "CallOutgoingView.h"
+#import "VoIPLibDelegate.h"
 
 @interface ViewController () <UCSIPCCDelegate,UITextFieldDelegate>
 {
-    LinphoneChatRoom *currentRoom;
+    VoIPLibDelegate *voipDelegate;
 }
 
 @end
@@ -40,13 +41,14 @@
     NSString *barTitle = @"登录";
     self.navigationItem.rightBarButtonItem = [CTB BarButtonWithTitle:barTitle target:self tag:1];
     self.edgesForExtendedLayout = UIRectEdgeNone;
-    //[CTB addObserver:self selector:@selector(buttonType) name:kLinphoneCallUpdate object:nil];
+    [CTB addObserver:self selector:@selector(callEvents:) name:kLinphoneCallUpdate object:nil];
     [CTB addTarget:self action:@selector(ButtonEvents:) button:_btnCall,_btnCallVideo,_btnSend, nil];
-    [CTB addObserver:self selector:@selector(onkLinphoneTextReceived:) name:kLinphoneTextReceived object:nil];
+    
+    voipDelegate = [VoIPLibDelegate instance];
+    voipDelegate.delegate = self;
     
     UCSIPCCManager *sipCCManager = [UCSIPCCManager instance];
     [sipCCManager startUCSphone];
-    sipCCManager.delegate = self;
     if (!sipCCManager.speakerEnabled) {
         [sipCCManager setSpeakerEnabled:YES];
     }
@@ -77,6 +79,7 @@
         btnTitle = button.currentTitle;
     }
     if (button.tag == 1) {
+        //登录
         btnTitle = ((UIBarButtonItem *)button).title;
         if ([btnTitle isEqualToString:@"登录"]) {
             
@@ -91,13 +94,17 @@
         }
     }
     else if (button.tag == 2) {
+        //主动呼叫(不开启视频)
         [self callEventsWithEnableVideo:NO];
     }
     else if (button.tag == 3) {
+        //主动呼叫(开启视频)
         [self callEventsWithEnableVideo:YES];
     }
     else if (button.tag == 4) {
+        //发送消息
         NSString *replyText = _txtTextMsg.text;
+        LinphoneChatRoom *currentRoom = (__bridge LinphoneChatRoom *)[voipDelegate valueForKey:@"currentRoom"];
         if (![self isLogin]) {
             [self.view makeToast:@"请先登录"];
             return;
@@ -116,6 +123,7 @@
 
 - (void)callEventsWithEnableVideo:(BOOL)enable
 {
+    //主动呼叫
     if (![[UCSIPCCManager instance] isUCSReady]) {
         return;
     }
@@ -143,13 +151,38 @@
     return YES;
 }
 
-#pragma mark - --------UCSIPCCDelegate------------------------
-//  登陆状态变化回调
-- (void)onRegisterStateChange:(UCSRegistrationState) state message:(const char*) message
+- (void)callEvents:(NSNotification *)notice
 {
-    NSString *stateMsg = [LinphoneManager getStateMsg:state];
-    NSString *msg = message ? [NSString stringWithUTF8String:message] : @"message is nil";
-    NSLog(@"登陆状态改变, state %@ , message = %@",stateMsg,msg);
+    LinphoneCall *call = [[notice.userInfo objectForKey: @"call"] pointerValue];
+    LinphoneCallState state = [[notice.userInfo objectForKey: @"state"] intValue];
+    
+    if (call) {
+        switch (state) {
+            case LinphoneCallUpdatedByRemote:
+            {
+                //对方主动请求会回调这个状态
+                break;
+            }
+            case LinphoneCallEnd: {
+                NSLog(@"LinphoneCallEnd ------>");
+            }
+            case LinphoneCallError: {
+                NSLog(@"LinphoneCallError ------>");
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"呼叫结束" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
+                [alert show];
+                break;
+            }
+            default:
+                break;
+        }
+    }
+}
+
+#pragma mark - --------UCSIPCCDelegate------------------------
+- (void)onRegisterStateChange:(UCSRegistrationState) state msgStr:(NSString *)message
+{
+    //  登陆状态变化回调
+    NSString *msg = message ?: @"message is nil";
     
     if (state == UCSRegistrationOk) {
         
@@ -178,88 +211,6 @@
     }
 }
 
-// 发起来电回调
-- (void)onOutgoingCall:(UCSCall *)call withState:(UCSCallState)state withMessage:(NSDictionary *) message
-{
-    NSLog(@"发起来电, state = %d , message = %@",state,[message stringForFormat]);
-    
-    //呼叫开始
-    CallOutgoingView *vc = [CallOutgoingView new];
-    [self presentViewController:vc animated:YES completion:^{}];
-}
-
-// 收到来电回调
-- (void)onIncomingCall:(UCSCall *)call withState:(UCSCallState)state withMessage:(NSDictionary *) message
-{
-    NSLog(@"收到来电, state = %d , message = %@",state,[message stringForFormat]);
-    
-    CallIncomingView *vc = [CallIncomingView new];
-    vc.call = call;
-    [self presentViewController:vc animated:YES completion:^{}];
-    
-    const LinphoneCallParams *params = linphone_call_get_remote_params(call);
-    if (linphone_call_params_video_enabled(params)) {
-        linphone_call_enable_camera(call, YES);
-        NSLog(@"启用相机");
-    }
-}
-
-// 接听回调
--(void)onAnswer:(UCSCall *)call withState:(UCSCallState)state withMessage:(NSDictionary *) message
-{
-    NSLog(@"接听, state = %d , message = %@",state,[message stringForFormat]);
-}
-
-// 媒体流已建立
-- (void)onStreamsRunning:(UCSCall *)call withState:(UCSCallState)state withMessage:(NSDictionary *) message
-{
-    NSLog(@"视频, state = %d , message = %@",state,[message stringForFormat]);
-    //启用视频接听
-    const LinphoneCallParams *params = linphone_call_get_remote_params(call);
-    if (linphone_call_params_video_enabled(params)) {
-        [[UCSIPCCManager instance] setVideoEnable:YES];
-    }
-}
-
-// 释放通话回调
-- (void)onHangUp:(UCSCall *)call withState:(UCSCallState)state withMessage:(NSDictionary *) message
-{
-    //结束呼叫
-    NSLog(@"结束通话, state = %d , message = %@",state,[message stringForFormat]);
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"UCS_Call_Released" object:nil userInfo:nil];
-    
-    if (state != UCSCallReleased) {
-        return;
-    }
-    
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"呼叫结束" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
-    [alert show];
-}
-
-// 呼叫失败回调
-- (void)onDialFailed:(UCSCallState)state withMessage:(NSDictionary *) message
-{
-    NSLog(@"呼叫失败, state = %d , message = %@",state,[message stringForFormat]);
-    
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"温馨提示" message:@"请输入正确的号码" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"确定", nil];
-    [alert show];
-}
-
-- (void)onkLinphoneTextReceived:(NSNotification *)notice
-{
-    NSDictionary *dict = notice.userInfo;
-    LinphoneChatMessage *message = [[dict objectForKey:@"message"] pointerValue];
-    LinphoneChatMessageState state = linphone_chat_message_get_state(message);
-    NSLog(@"msg state = %d",state);
-    
-    NSString *textMsg = [UCSIPCCManager TextMessageForChat:message];
-    NSLog(@"textMsg = %@",textMsg);
-    
-    NSString *replyText = @"收到消息";
-    currentRoom = linphone_chat_message_get_chat_room(message);
-    [UCSIPCCManager sendTextWithRoom:currentRoom message:replyText];
-}
-
 #pragma mark
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
@@ -285,5 +236,9 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 
 @end

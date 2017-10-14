@@ -31,7 +31,7 @@
 /**
  初始化
  */
--(void)startUCSphone;
+- (void)startUCSphone;
 
 
 /**

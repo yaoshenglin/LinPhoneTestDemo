@@ -2007,7 +2007,7 @@ static void audioRouteChangeListenerCallback (void *inUserData,                 
 	if (bluetoothAvailable) {
 		// The change of route will be done in setSpeakerEnabled
 		bluetoothEnabled = enable;
-		if (bluetoothEnabled) {
+		if (enable) {
 			[self setSpeakerEnabled:FALSE];
 		} else {
 			[self setSpeakerEnabled:speakerEnabled];

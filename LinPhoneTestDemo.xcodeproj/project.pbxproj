@@ -544,6 +544,7 @@
 		1455E9D61F58041800044DE0 /* waiting_time@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1455E8241F58041800044DE0 /* waiting_time@2x.png */; };
 		145F76701F73A34700FB3D45 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 145F766F1F73A34700FB3D45 /* InfoPlist.strings */; };
 		146032E41F7CE3CC00005B73 /* AudioClass.m in Sources */ = {isa = PBXBuildFile; fileRef = 146032E31F7CE3CC00005B73 /* AudioClass.m */; };
+		1463D20D1F91A574003BFAB1 /* VoIPLibDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1463D20C1F91A574003BFAB1 /* VoIPLibDelegate.m */; };
 		1484DA671F78AFDE00C978EF /* Toast+UIView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1484DA661F78AFDE00C978EF /* Toast+UIView.m */; };
 		148DA9101F564C140080C792 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 148DA90F1F564C140080C792 /* main.m */; };
 		148DA9131F564C140080C792 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 148DA9121F564C140080C792 /* AppDelegate.m */; };
@@ -1187,6 +1188,8 @@
 		145F766F1F73A34700FB3D45 /* InfoPlist.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = InfoPlist.strings; sourceTree = "<group>"; };
 		146032E21F7CE3CC00005B73 /* AudioClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioClass.h; sourceTree = "<group>"; };
 		146032E31F7CE3CC00005B73 /* AudioClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioClass.m; sourceTree = "<group>"; };
+		1463D20B1F91A573003BFAB1 /* VoIPLibDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VoIPLibDelegate.h; sourceTree = "<group>"; };
+		1463D20C1F91A574003BFAB1 /* VoIPLibDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VoIPLibDelegate.m; sourceTree = "<group>"; };
 		1484DA651F78AFDE00C978EF /* Toast+UIView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Toast+UIView.h"; sourceTree = "<group>"; };
 		1484DA661F78AFDE00C978EF /* Toast+UIView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Toast+UIView.m"; sourceTree = "<group>"; };
 		148DA90B1F564C140080C792 /* LinPhoneTestDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LinPhoneTestDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1871,6 +1874,8 @@
 				1484DA661F78AFDE00C978EF /* Toast+UIView.m */,
 				14C883171F7BB25500C0BACE /* MBProgressHUD.h */,
 				14C883181F7BB25500C0BACE /* MBProgressHUD.m */,
+				1463D20B1F91A573003BFAB1 /* VoIPLibDelegate.h */,
+				1463D20C1F91A574003BFAB1 /* VoIPLibDelegate.m */,
 				14C883191F7BB25500C0BACE /* UCSUserDefaultManager.h */,
 				14C8831A1F7BB25500C0BACE /* UCSUserDefaultManager.m */,
 				146032E21F7CE3CC00005B73 /* AudioClass.h */,
@@ -4106,6 +4111,7 @@
 				1455E5E21F579EB100044DE0 /* UCSIPCCManager.m in Sources */,
 				14C8831B1F7BB25500C0BACE /* MBProgressHUD.m in Sources */,
 				1455E6511F57FF0300044DE0 /* UIAddressTextField.m in Sources */,
+				1463D20D1F91A574003BFAB1 /* VoIPLibDelegate.m in Sources */,
 				148DA9161F564C140080C792 /* ViewController.m in Sources */,
 				146032E41F7CE3CC00005B73 /* AudioClass.m in Sources */,
 				1455E5F31F579EED00044DE0 /* FastAddressBook.m in Sources */,

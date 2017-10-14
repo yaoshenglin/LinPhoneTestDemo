@@ -52,6 +52,7 @@ static NSTimer *timer;
 
 - (void)viewDidLoad {
     self.speakButton.hidden = YES;
+    _call = linphone_core_get_current_call(LC);
     
     NSString *remoteAddress = [[UCSIPCCManager instance] getRemoteAddress];
     NSString *remoteDisplayName = [[UCSIPCCManager instance] getRemoteDisplayName];
@@ -101,14 +102,9 @@ static NSTimer *timer;
 	if (_call == acall && (astate == UCSCallEnd || astate == UCSCallError)) {
 		[_delegate incomingCallAborted:_call];
         [self onDeclineClick:nil];
-	} else if (_call == acall && astate == UCSCallConnected){
+	}
+    else if (_call == acall && astate == UCSCallConnected){
         // 点击了接听且连接, 改变UI
-//        NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:1
-//                                         target:self
-//                                       selector:@selector(callDurationUpdate)
-//                                       userInfo:nil
-//                                        repeats:YES];
-        
         timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(callDurationUpdate) userInfo:nil repeats:YES];
         [[NSRunLoop currentRunLoop] addTimer:timer forMode:NSDefaultRunLoopMode];
         [timer fire];
@@ -116,6 +112,45 @@ static NSTimer *timer;
         self.speakButton.hidden = NO;
         self.acceptButton.hidden = YES;
 	}
+    else if (_call == acall && astate == LinphoneCallUpdatedByRemote)
+    {
+        //对方主动请求会回调这个状态
+        NSLog(@"对方响应 ------>");
+        const LinphoneCallParams* current = linphone_call_get_current_params(_call);
+        const LinphoneCallParams* remote = linphone_call_get_remote_params(_call);
+        
+        /* remote wants to add video */
+        if (linphone_core_video_enabled(LC) && !linphone_call_params_video_enabled(current) &&
+            linphone_call_params_video_enabled(remote)&& !linphone_core_get_video_policy(LC)->automatically_accept) {
+            [self displayAskToEnableVideoCall:_call];
+        }
+        else if (linphone_call_params_video_enabled(current) && !linphone_call_params_video_enabled(remote)) {
+            //[self displayTableCall:animated];
+        }
+    }
+    else if (acall && astate == LinphoneCallUpdating) {
+        NSLog(@"自己响应 ------>");
+    }
+}
+
+//发起请求相关
+- (void)displayAskToEnableVideoCall:(LinphoneCall*) call
+{
+    linphone_call_defer_update(call);
+    if (linphone_core_get_video_policy(LC)->automatically_accept) {
+        NSLog(@"自动接受视频对讲!!");
+        return;
+    }
+    
+    //视频允许播放:
+    const LinphoneCallParams *cp = linphone_call_get_current_params(call);
+    LinphoneCallParams* paramsCopy = linphone_call_params_copy(cp);
+    linphone_call_params_enable_video(paramsCopy, TRUE);
+    linphone_call_accept_update(call, paramsCopy);
+    linphone_call_params_unref(paramsCopy);
+    NSLog(@"开始视频对讲!!");
+    
+    //linphone_core_enable_audio_adaptive_jittcomp(LC, true);
 }
 
 #pragma mark -

@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import <PushKit/PushKit.h>
 
+#import "CTB.h"
+
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
