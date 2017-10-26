@@ -18,6 +18,7 @@
  */
 
 #import <UIKit/UIKit.h>
+#import "linphonecore.h"
 
 #ifndef LINPHONE_UTILS_H
 #define LINPHONE_UTILS_H
@@ -28,12 +29,19 @@
     [inst_ isKindOfClass:[cls class]]? inst_ : nil; \
  })
 
+#define LOGV(level, ...) [LinphoneLogger log:level file:__FILE__ line:__LINE__ format:__VA_ARGS__]
+#define LOGD(...) LOGV(ORTP_DEBUG, __VA_ARGS__)
+#define LOGI(...) LOGV(ORTP_MESSAGE, __VA_ARGS__)
+#define LOGW(...) LOGV(ORTP_WARNING, __VA_ARGS__)
+#define LOGE(...) LOGV(ORTP_ERROR, __VA_ARGS__)
+#define LOGF(...) LOGV(ORTP_FATAL, __VA_ARGS__)
+
 typedef enum _LinphoneLoggerSeverity {
-    LinphoneLoggerDebug = 0,
-    LinphoneLoggerLog,
-    LinphoneLoggerWarning,
-    LinphoneLoggerError,
-    LinphoneLoggerFatal
+    LinphoneLoggerDebug = 0,    //LOGD
+    LinphoneLoggerLog,          //LOGI
+    LinphoneLoggerWarning,      //LOGW
+    LinphoneLoggerError,        //LOGE
+    LinphoneLoggerFatal         //LOGF
 } LinphoneLoggerSeverity;
 
 typedef enum {
@@ -49,8 +57,11 @@ typedef enum {
     
 }
 
-+ (void)log:(LinphoneLoggerSeverity) severity format:(NSString *)format,...;
-+ (void)logc:(LinphoneLoggerSeverity) severity format:(const char *)format,...;
++ (NSString *)cacheDirectory;
++ (void)log:(OrtpLogLevel)severity file:(const char *)file line:(int)line format:(NSString *)format, ...;
++ (void)enableLogs:(OrtpLogLevel)level;
+//+ (void)log:(LinphoneLoggerSeverity) severity format:(NSString *)format,...;
+//+ (void)logc:(LinphoneLoggerSeverity) severity format:(const char *)format,...;
 
 @end
 

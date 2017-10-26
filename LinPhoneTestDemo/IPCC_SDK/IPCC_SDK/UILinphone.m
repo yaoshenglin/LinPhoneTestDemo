@@ -33,7 +33,7 @@
     CGColorRef cgColor = [self CGColor];
     CGColorSpaceRef cgColorSpace = CGColorGetColorSpace(cgColor);
     if(CGColorSpaceGetModel(cgColorSpace) != kCGColorSpaceModelRGB) {
-        [LinphoneLogger log:LinphoneLoggerWarning format:@"Can't convert not RGB color"];
+        LOGW(@"Can't convert not RGB color");
         return self;
     } else {
         const CGFloat *colors = CGColorGetComponents(cgColor);
@@ -61,7 +61,7 @@
     CGColorRef cgColor = [self CGColor];
     CGColorSpaceRef cgColorSpace = CGColorGetColorSpace(cgColor);
     if(CGColorSpaceGetModel(cgColorSpace) != kCGColorSpaceModelRGB) {
-        [LinphoneLogger log:LinphoneLoggerWarning format:@"Can't convert not RGB color"];
+        LOGW(@"Can't convert not RGB color");
         return self;
     } else {
         const CGFloat *colors = CGColorGetComponents(cgColor);

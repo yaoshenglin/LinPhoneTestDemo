@@ -16,56 +16,126 @@
  *  along with this program; if not, write to the Free Software         
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */   
+#define FILE_SIZE 17
+#define DOMAIN_SIZE 3
 
-
+#import <asl.h>
 #import "Utils.h"
-#include "linphone/linphonecore.h"
 
 @implementation LinphoneLogger
 
-
-+ (void)logv:(LinphoneLoggerSeverity)severity format:(NSString*)format args:(va_list)args
++ (NSString *)cacheDirectory
 {
-    NSString *str = [[NSString alloc] initWithFormat: format arguments:args];
-    if(severity <= LinphoneLoggerDebug) {
-        ms_debug("%s", [str UTF8String]);
-    } else  if(severity <= LinphoneLoggerLog) {
-        ms_message("%s", [str UTF8String]);
-    } else if(severity <= LinphoneLoggerWarning) {
-        ms_warning("%s", [str UTF8String]);
-    } else if(severity <= LinphoneLoggerError) {
-        ms_error("%s", [str UTF8String]);
-    } else if(severity <= LinphoneLoggerFatal) {
-        ms_fatal("%s", [str UTF8String]);
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    NSString *cachePath = [paths objectAtIndex:0];
+    BOOL isDir = NO;
+    NSError *error;
+    // cache directory must be created if not existing
+    if (![[NSFileManager defaultManager] fileExistsAtPath:cachePath isDirectory:&isDir] && isDir == NO) {
+        if (![[NSFileManager defaultManager] createDirectoryAtPath:cachePath
+                                       withIntermediateDirectories:NO
+                                                        attributes:nil
+                                                             error:&error]) {
+            LOGE(@"Could not create cache directory: %@", error);
+        }
     }
-    //[str release];
+    return cachePath;
 }
 
-+ (void)log:(LinphoneLoggerSeverity) severity format:(NSString *)format,...
++ (void)log:(OrtpLogLevel)severity file:(const char *)file line:(int)line format:(NSString *)format, ...
 {
     va_list args;
-	va_start (args, format);
-    [LinphoneLogger logv:severity format:format args:args];
-    va_end (args);
+    va_start(args, format);
+    NSString *str = [[NSString alloc] initWithFormat:format arguments:args];
+    const char *utf8str = [str cStringUsingEncoding:NSString.defaultCStringEncoding];
+    const char *filename = strchr(file, '/') ? strrchr(file, '/') + 1 : file;
+    NSString *value = [NSString stringWithFormat:@"(%*s:%-4d) %s", FILE_SIZE, filename + MAX((int)strlen(filename) - FILE_SIZE, 0), line, utf8str];
+    //ortp_log(severity, "(%*s:%-4d) %s", FILE_SIZE, filename + MAX((int)strlen(filename) - FILE_SIZE, 0), line, utf8str);
+    va_end(args);
+    
+    NSLog(@"%@",value);
+    //    if(severity == ORTP_DEBUG) {
+    //        LOGD(str);
+    //    } else  if(severity == ORTP_MESSAGE) {
+    //        LOGI(str);
+    //    } else if(severity == ORTP_WARNING) {
+    //        LOGW(str);
+    //    } else if(severity == ORTP_ERROR) {
+    //        LOGE(str);
+    //    } else if(severity == ORTP_FATAL) {
+    //        LOGF(str);
+    //    }
 }
 
-+ (void)logc:(LinphoneLoggerSeverity) severity format:(const char *)format,...
-{
-    va_list args;
-    //OrtpLogLevel level = ORTP_NONE;
-	va_start (args, format);
-    if(severity <= LinphoneLoggerDebug) {
-        ortp_logv("", ORTP_DEBUG, format, args);
-    } else if(severity <= LinphoneLoggerLog) {
-        ortp_logv("", ORTP_MESSAGE, format, args);
-    } else if(severity <= LinphoneLoggerWarning) {
-        ortp_logv("", ORTP_WARNING, format, args);
-    } else if(severity <= LinphoneLoggerError) {
-        ortp_logv("", ORTP_ERROR, format, args);
-    } else if(severity <= LinphoneLoggerFatal) {
-        ortp_logv("", ORTP_FATAL, format, args);
++ (void)enableLogs:(OrtpLogLevel)level {
+    BOOL enabled = (level >= ORTP_DEBUG && level < ORTP_ERROR);
+    static BOOL stderrInUse = NO;
+    if (!stderrInUse) {
+        asl_add_log_file(NULL, STDERR_FILENO);
+        stderrInUse = YES;
     }
-	va_end (args);
+    linphone_core_set_log_collection_path([self cacheDirectory].UTF8String);
+    linphone_core_set_log_handler(linphone_iphone_log_handler);
+    linphone_core_enable_log_collection(enabled);
+    if (level == 0) {
+        linphone_core_set_log_level(ORTP_FATAL);
+        ortp_set_log_level("ios", ORTP_FATAL);
+        NSLog(@"I/%s/Disabling all logs", ORTP_LOG_DOMAIN);
+    } else {
+        NSLog(@"I/%s/Enabling %s logs", ORTP_LOG_DOMAIN, (enabled ? "all" : "application only"));
+        linphone_core_set_log_level(level);
+        ortp_set_log_level("ios", level == ORTP_DEBUG ? ORTP_DEBUG : ORTP_MESSAGE);
+    }
+}
+
+#pragma mark - Logs Functions callbacks
+
+void linphone_iphone_log_handler(const char *domain, OrtpLogLevel lev, const char *fmt, va_list args) {
+    NSString *format = [[NSString alloc] initWithUTF8String:fmt];
+    NSString *formatedString = [[NSString alloc] initWithFormat:format arguments:args];
+    NSString *lvl;
+    
+    if (!domain)
+        domain = "lib";
+    // since \r are interpreted like \n, avoid double new lines when logging network packets (belle-sip)
+    // output format is like: I/ios/some logs. We truncate domain to **exactly** DOMAIN_SIZE characters to have
+    // fixed-length aligned logs
+    switch (lev) {
+        case ORTP_FATAL:
+            lvl = @"Fatal";
+            break;
+        case ORTP_ERROR:
+            lvl = @"Error";
+            break;
+        case ORTP_WARNING:
+            lvl = @"Warning";
+            break;
+        case ORTP_MESSAGE:
+            lvl = @"Message";
+            break;
+        case ORTP_DEBUG:
+            lvl = @"Debug";
+            break;
+        case ORTP_TRACE:
+            lvl = @"Trace";
+            break;
+        case ORTP_LOGLEV_END:
+            return;
+        default:
+            break;
+    }
+    if ([formatedString containsString:@"\n"]) {
+        NSArray *myWords = [[formatedString stringByReplacingOccurrencesOfString:@"\r\n" withString:@"\n"]
+                            componentsSeparatedByString:@"\n"];
+        for (int i = 0; i < myWords.count; i++) {
+            NSString *tab = i > 0 ? @"\t" : @"";
+            if (((NSString *)myWords[i]).length > 0) {
+                NSLog(@"[%@] %@%@", lvl, tab, (NSString *)myWords[i]);
+            }
+        }
+    } else {
+        NSLog(@"[%@] %@", lvl, [formatedString stringByReplacingOccurrencesOfString:@"\r\n" withString:@"\n"]);
+    }
 }
 
 @end
@@ -311,28 +381,22 @@
 
 @end
 
-#define LOGV(level, argstart)   \
-    va_list args;               \
-    va_start(args, argstart);   \
-    [LinphoneLogger logv:level format:argstart args:args]; \
-    va_end(args);
-
 void Linphone_log(NSString* format, ...){
-    LOGV(LinphoneLoggerLog, format);
+    LOGV(ORTP_MESSAGE, format);
 }
 
 void Linphone_dbg(NSString* format, ...){
-    LOGV(LinphoneLoggerDebug, format);
+    LOGV(ORTP_DEBUG, format);
 }
 
 void Linphone_warn(NSString* format, ...){
-    LOGV(LinphoneLoggerWarning, format);
+    LOGV(ORTP_WARNING, format);
 }
 
 void Linphone_err(NSString* format, ...){
-    LOGV(LinphoneLoggerError, format);
+    LOGV(ORTP_ERROR, format);
 }
 
 void Linphone_fatal(NSString* format, ...){
-    LOGV(LinphoneLoggerFatal, format);
+    LOGV(ORTP_FATAL, format);
 }

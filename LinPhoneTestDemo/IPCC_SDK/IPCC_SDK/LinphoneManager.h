@@ -33,10 +33,11 @@
 #import "FastAddressBook.h"
 #import "Utils.h"
 
-#include "linphone/linphonecore.h"
-#include "linphone/linphone_tunnel.h"
+//#include "linphone/linphonecore.h"
+#import "linphone_tunnel.h"
 
 #define LC [LinphoneManager getLc]
+
 extern const char *const LINPHONERC_APPLICATION_KEY;
 
 extern NSString *const kLinphoneCoreUpdate;
@@ -157,7 +158,6 @@ typedef struct _LinphoneManagerSounds {
 - (bool)allowSpeaker;
 
 - (void)configureVbrCodecs;
-- (void)setLogsEnabled:(BOOL)enabled;
 
 + (BOOL)copyFile:(NSString*)src destination:(NSString*)dst override:(BOOL)override;
 + (NSString*)bundleFile:(NSString*)file;
@@ -167,8 +167,8 @@ typedef struct _LinphoneManagerSounds {
 - (void)call:(NSString *)address displayName:(NSString*)displayName transfer:(BOOL)transfer enableVideo:(BOOL)enable;
 
 
-+(id)getMessageAppDataForKey:(NSString*)key inMessage:(LinphoneChatMessage*)msg;
-+(void)setValueInMessageAppData:(id)value forKey:(NSString*)key inMessage:(LinphoneChatMessage*)msg;
++ (id)getMessageAppDataForKey:(NSString*)key inMessage:(LinphoneChatMessage*)msg;
++ (void)setValueInMessageAppData:(id)value forKey:(NSString*)key inMessage:(LinphoneChatMessage*)msg;
 
 - (void)lpConfigSetString:(NSString*)value forKey:(NSString*)key;
 - (NSString*)lpConfigStringForKey:(NSString*)key;

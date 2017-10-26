@@ -82,7 +82,7 @@
 #import <CoreLocation/CLLocation.h>
 #import <UIKit/UIKit.h>
 
-typedef NSString * (^WriteBlock)();
+typedef NSString * (^WriteBlock)(void);
 typedef CF_ENUM(NSStringEncoding, CFStringBuilt) {
     GBEncoding = 0x80000632 /* kTextEncodingUnicodeDefault + kUnicodeUTF32LEFormat */
 };
@@ -380,7 +380,7 @@ UIColor *colorWithRGB(CGFloat r,CGFloat g,CGFloat b,CGFloat alpha);
 + (void)deleteFileFor:(NSString *)path;
 
 #pragma mark 获取AppCaidan.db的路径
-NSArray *getDBPath();
+NSArray *getDBPath(void);
 + (NSArray *)getDBPath;
 
 + (NSString *)pathForResource:(NSString *)name ofType:(NSString *)ext;
@@ -484,7 +484,7 @@ void CharLog(NSString *format, ...);
 + (void)syncWithBlock:(dispatch_block_t)block;  //同步
 + (void)async:(dispatch_block_t)block complete:(dispatch_block_t)nextBlock;//先异步
 + (NSUserDefaults *)getUserDefaults;
-NSUserDefaults *getUserDefaults();
+NSUserDefaults *getUserDefaults(void);
 void setUserData(id obj,NSString *key);
 void removeObjectForKey(NSString *key);
 id getUserData(NSString *key);
@@ -530,7 +530,7 @@ NSString *LocalizedSingles(NSArray *listKey);//多个组合时用这个
 #pragma mark - ----------过滤HTML------------------------
 + (NSString *)removeHTML:(NSString *)html;
 
-BOOL isZH();//语言为中文
+BOOL isZH(void);//语言为中文
 
 #pragma mark - ----------处理异常操作------------------------
 + (void)Try:(dispatch_block_t)try;

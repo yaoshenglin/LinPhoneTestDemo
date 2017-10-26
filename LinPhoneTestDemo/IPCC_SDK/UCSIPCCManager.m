@@ -228,7 +228,7 @@ static id _ucsIPCCDelegate = nil; //代理对象，用于回调
         LinphoneSipTransports transportValue = {5060,5060,-1,-1};
         
         if (linphone_core_set_sip_transports(lc, &transportValue)) {
-            [LinphoneLogger logc:LinphoneLoggerError format:"cannot set transport"];
+            LOGE(@"cannot set transport");
         }
         
         [[LinphoneManager instance] lpConfigSetString:@"" forKey:@"sharing_server_preference"];
@@ -236,7 +236,7 @@ static id _ucsIPCCDelegate = nil; //代理对象，用于回调
         [[LinphoneManager instance] lpConfigSetString:@"" forKey:@"stun_preference"];
         linphone_core_set_stun_server(lc, NULL);
         //linphone_core_set_firewall_policy(lc, LinphonePolicyNoFirewall);
-        linphone_core_set_nat_policy(lc, LinphonePolicyNoFirewall);
+        linphone_core_set_nat_policy(lc, (LinphoneNatPolicy*)LinphonePolicyNoFirewall);
     }
 }
 

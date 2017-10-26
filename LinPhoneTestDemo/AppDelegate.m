@@ -84,11 +84,11 @@
     NSString *name = [UCSUserDefaultManager GetLocalDataString:@"login_user_name"];
     NSString *password = [UCSUserDefaultManager GetLocalDataString:@"login_password"];
     NSString *domain = [UCSUserDefaultManager GetLocalDataString:@"login_domain"];
-    NSString *port = [UCSUserDefaultManager GetLocalDataString:@"login_port"];
+    //NSString *port = [UCSUserDefaultManager GetLocalDataString:@"login_port"];
     NSString *transport = [UCSUserDefaultManager GetLocalDataString:@"login_transport"];
     NSString *displayName = [UCSUserDefaultManager GetLocalDataString:@"login_displayName"];
     
-    if (name.length != 0 && password.length != 0 && domain.length != 0 && port.length != 0) {
+    if (name.length != 0 && password.length != 0 && domain.length != 0) {
         // 自动设置注册信息
         [[UCSIPCCManager instance] addProxyConfig:name password:password displayName:displayName domain:domain port:nil withTransport:transport];
     }
@@ -312,7 +312,7 @@
 
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center
 didReceiveNotificationResponse:(UNNotificationResponse *)response
-         withCompletionHandler:(void (^)())completionHandler
+         withCompletionHandler:(void (^)(void))completionHandler
 {
     NSLog(@"UN : response received");
     NSLog(@"%@",response.description);
@@ -636,7 +636,7 @@ didReceiveNotificationResponse:(UNNotificationResponse *)response
 - (void)switchCallViewControllerWithInitBlock:(void (^)(BOOL isWakeUp))initblock
                                   rejectBlock:(void (^)(UILabel *label))rejBlock
                                  receiveBlock:(void (^)(UILabel *label))reveiceBlock
-                                setttingBlock:(BOOL (^)())settingblock
+                                setttingBlock:(BOOL (^)(void))settingblock
 {
     
 //    VistorCallUp_ViewController *vc = [[VistorCallUp_ViewController alloc] initWithReceiveBlock:reveiceBlock andRejectBlock:rejBlock initialBlock:initblock];
