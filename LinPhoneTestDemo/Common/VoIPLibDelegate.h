@@ -17,6 +17,10 @@
 @end
 
 @interface VoIPLibDelegate : NSObject
+{
+@public
+    LinphoneChatRoom *currentRoom;
+}
 
 @property (nonatomic, weak) id delegate;
 

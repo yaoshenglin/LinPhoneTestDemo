@@ -104,7 +104,7 @@
     else if (button.tag == 4) {
         //发送消息
         NSString *replyText = _txtTextMsg.text;
-        LinphoneChatRoom *currentRoom = (__bridge LinphoneChatRoom *)[voipDelegate valueForKey:@"currentRoom"];
+        LinphoneChatRoom *currentRoom = voipDelegate->currentRoom;
         if (![self isLogin]) {
             [self.view makeToast:@"请先登录"];
             return;

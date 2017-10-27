@@ -14,7 +14,7 @@ static VoIPLibDelegate *theVoIPLibDelegate = nil;
 
 @interface VoIPLibDelegate () <UCSIPCCDelegate>
 {
-    LinphoneChatRoom *currentRoom;
+    
 }
 
 @end
